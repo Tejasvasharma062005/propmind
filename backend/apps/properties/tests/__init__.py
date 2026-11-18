@@ -1,0 +1,3 @@
+"""
+Properties test package.
+"""

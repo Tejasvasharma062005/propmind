@@ -1,0 +1,3 @@
+"""
+Users migrations package.
+"""

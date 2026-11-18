@@ -1,0 +1,1 @@
+from .analytics_selectors import get_locality_trends

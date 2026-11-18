@@ -1,0 +1,1 @@
+from .legal_selectors import get_reports_for_property

@@ -1,0 +1,2 @@
+class NegotiationService:
+    pass
