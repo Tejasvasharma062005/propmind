@@ -1,5 +1,5 @@
 import { api } from '@/lib/api';
-import type { User, KYCRecord, UserRole } from '@/types/auth.types';
+import type { User, KYCRecord, ProfessionalProfile, UserRole } from '@/types/auth.types';
 import type { ApiResponse } from '@/types/common.types';
 
 export const userService = {
@@ -10,6 +10,21 @@ export const userService = {
 
   async updateProfile(data: Partial<User['profile']> & { name?: string }): Promise<ApiResponse<User>> {
     const response = await api.patch('/users/me/', data);
+    return response.data;
+  },
+
+  async getProfessionalProfile(): Promise<ApiResponse<ProfessionalProfile | null>> {
+    const response = await api.get('/users/professional-profile/');
+    return response.data;
+  },
+
+  async saveProfessionalProfile(data: {
+    profession: 'AGENT' | 'ADVOCATE' | 'VERIFIER' | 'NEGOTIATOR';
+    license_number?: string;
+    agency_name?: string;
+    years_experience?: number;
+  }): Promise<ApiResponse<ProfessionalProfile>> {
+    const response = await api.post('/users/professional-profile/', data);
     return response.data;
   },
 

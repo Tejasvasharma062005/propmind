@@ -56,16 +56,16 @@ export const PropertyFilters: React.FC<PropertyFiltersProps> = ({
   };
 
   return (
-    <div className={cn('bg-white p-5 sm:p-6 rounded-2xl border border-[#E6E0D3] space-y-6', className)}>
-      <div className="flex items-center justify-between border-b border-[#EFEAE0] pb-4">
+    <div className={cn('bg-[#F8F4E9] p-5 sm:p-6 rounded-2xl border border-[#D8C9A7] space-y-6', className)}>
+      <div className="flex items-center justify-between border-b border-[#D8C9A7]/70 pb-4">
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-[#1B3126]" />
-          <h3 className="font-serif font-bold text-[#1C2420] text-lg">Refine Search</h3>
+          <Filter className="w-4 h-4 text-[#171715]" />
+          <h3 className="font-serif font-bold text-[#373124] text-lg">Refine Search</h3>
         </div>
         <button
           type="button"
           onClick={onReset}
-          className="text-xs text-[#5A625D] hover:text-[#1B3126] flex items-center gap-1 font-medium transition-colors"
+          className="text-xs text-[#494431] hover:text-[#171715] flex items-center gap-1 font-medium transition-colors"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           Reset All
@@ -78,23 +78,25 @@ export const PropertyFilters: React.FC<PropertyFiltersProps> = ({
         className={cn(
           'p-3.5 rounded-xl border cursor-pointer select-none transition-all flex items-center justify-between',
           filters.verified_only
-            ? 'bg-[#E6EDE8] border-[#6E8474] text-[#1B3126]'
-            : 'bg-[#FAF7F2] border-[#E6E0D3] text-[#1C2420] hover:border-[#C9A96E]'
+            ? 'bg-[#171715] border-[#171715] text-[#F8F4E9]'
+            : 'bg-[#F3EBD8] border-[#D8C9A7] text-[#373124] hover:border-[#C3A66B]'
         )}
       >
         <div className="flex items-center gap-2.5">
           <ShieldCheck
-            className={cn('w-5 h-5', filters.verified_only ? 'text-[#1B3126]' : 'text-[#7A827D]')}
+            className={cn('w-5 h-5', filters.verified_only ? 'text-[#C3A66B]' : 'text-[#494431]')}
           />
           <div>
             <div className="text-xs font-semibold">PropMind Verified Only</div>
-            <div className="text-[11px] text-[#5A625D]">Legal title checked & clear</div>
+            <div className={cn('text-[11px]', filters.verified_only ? 'text-[#D8C9A7]' : 'text-[#494431]')}>
+              Legal title checked & clear
+            </div>
           </div>
         </div>
         <div
           className={cn(
             'w-5 h-5 rounded-md flex items-center justify-center transition-colors',
-            filters.verified_only ? 'bg-[#1B3126] text-[#FAF7F2]' : 'border border-[#D5CCB9] bg-white'
+            filters.verified_only ? 'bg-[#C3A66B] text-[#171715]' : 'border border-[#D8C9A7] bg-[#F8F4E9]'
           )}
         >
           {filters.verified_only && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -103,13 +105,13 @@ export const PropertyFilters: React.FC<PropertyFiltersProps> = ({
 
       {/* Indore Locality Selector */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-wider text-[#5A625D] block">
+        <label className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#494431] block">
           Indore Locality
         </label>
         <select
           value={filters.locality || ''}
           onChange={handleLocalityChange}
-          className="w-full text-sm rounded-xl border border-[#D5CCB9] bg-[#FAF7F2] p-2.5 text-[#1C2420] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#1B3126]"
+          className="w-full text-sm rounded-xl border border-[#D8C9A7] bg-[#F6F0DE] p-2.5 text-[#373124] focus:bg-[#F8F4E9] focus:outline-none focus:ring-2 focus:ring-[#494431]"
         >
           <option value="">All Indore Localities</option>
           {INDORE_LOCALITIES.map((loc) => (
@@ -122,7 +124,7 @@ export const PropertyFilters: React.FC<PropertyFiltersProps> = ({
 
       {/* Property Type Filter */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-wider text-[#5A625D] block">
+        <label className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#494431] block">
           Property Type
         </label>
         <div className="grid grid-cols-1 gap-1.5">
@@ -136,12 +138,12 @@ export const PropertyFilters: React.FC<PropertyFiltersProps> = ({
                 className={cn(
                   'w-full text-left px-3 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between',
                   isSelected
-                    ? 'bg-[#1B3126] text-[#FAF7F2] font-semibold'
-                    : 'text-[#4A544E] hover:bg-[#F3EFE6] border border-transparent'
+                    ? 'bg-[#171715] text-[#F8F4E9] font-semibold'
+                    : 'text-[#373124] hover:bg-[#F3EBD8] border border-transparent'
                 )}
               >
                 <span>{t.label}</span>
-                {isSelected && <Check className="w-3.5 h-3.5 text-[#C9A96E]" />}
+                {isSelected && <Check className="w-3.5 h-3.5 text-[#C3A66B]" />}
               </button>
             );
           })}
@@ -150,7 +152,7 @@ export const PropertyFilters: React.FC<PropertyFiltersProps> = ({
 
       {/* BHK Config Filter */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-wider text-[#5A625D] block">
+        <label className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#494431] block">
           BHK Bedrooms
         </label>
         <div className="grid grid-cols-5 gap-1.5">
@@ -164,8 +166,8 @@ export const PropertyFilters: React.FC<PropertyFiltersProps> = ({
                 className={cn(
                   'py-2 text-center rounded-xl text-xs font-medium border transition-all',
                   isSelected
-                    ? 'bg-[#1B3126] text-[#FAF7F2] border-[#1B3126] font-bold shadow-xs'
-                    : 'bg-[#FAF7F2] text-[#1C2420] border-[#E6E0D3] hover:bg-[#EFEAE0]'
+                    ? 'bg-[#171715] text-[#F8F4E9] border-[#171715] font-bold'
+                    : 'bg-[#F6F0DE] text-[#373124] border-[#D8C9A7] hover:bg-[#F3EBD8]'
                 )}
               >
                 {opt.label.replace(' BHK', '')} BHK
@@ -177,7 +179,7 @@ export const PropertyFilters: React.FC<PropertyFiltersProps> = ({
 
       {/* Budget Range Presets */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-wider text-[#5A625D] block">
+        <label className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#494431] block">
           Budget Range
         </label>
         <div className="grid grid-cols-2 gap-2">

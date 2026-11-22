@@ -120,12 +120,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
   return (
     <aside
       className={cn(
-        'w-64 bg-[#F3EFE6] border-r border-[#E6E0D3] h-[calc(100vh-4.5rem)] sm:h-[calc(100vh-5rem)] sticky top-18 sm:top-20 flex flex-col justify-between shrink-0 select-none overflow-y-auto',
+        'w-64 bg-[#F3EBD8] border-r border-[#D8C9A7] h-[calc(100vh-4.5rem)] sm:h-[calc(100vh-5rem)] sticky top-18 sm:top-20 flex flex-col justify-between shrink-0 select-none overflow-y-auto',
         className
       )}
     >
       <div className="p-4 space-y-1">
-        <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7A827D]">
+        <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#494431]">
           Workspace
         </div>
         <nav className="space-y-1">
@@ -141,8 +141,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
                   cn(
                     'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all group',
                     isActive
-                      ? 'bg-[#1B3126] text-[#FAF7F2] font-semibold shadow-xs'
-                      : 'text-[#4A544E] hover:text-[#1C2420] hover:bg-[#E6E0D3]/60'
+                      ? 'bg-[#171715] text-[#F8F4E9] font-semibold'
+                      : 'text-[#373124] hover:bg-[#D8C9A7]/40'
                   )
                 }
               >
@@ -151,7 +151,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
                     <Icon
                       className={cn(
                         'w-4 h-4 transition-colors',
-                        isActive ? 'text-[#C9A96E]' : 'text-[#6B736E] group-hover:text-[#1B3126]'
+                        isActive ? 'text-[#C3A66B]' : 'text-[#494431] group-hover:text-[#171715]'
                       )}
                     />
                     <span>{item.label}</span>
@@ -164,12 +164,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
       </div>
 
       {/* Indore PropMind Trust Badge in Sidebar Footer */}
-      <div className="p-4 m-4 rounded-xl bg-[#1B3126] text-[#FAF7F2] border border-[#2C4A3B] text-xs">
-        <div className="flex items-center gap-1.5 font-serif font-semibold text-sm text-[#C9A96E] mb-1">
-          <FileCheck className="w-4 h-4 text-[#C9A96E]" />
+      <div className="p-4 m-4 rounded-xl bg-[#171715] text-[#F8F4E9] border border-[#494431] text-xs">
+        <div className="flex items-center gap-1.5 font-serif font-semibold text-sm text-[#C3A66B] mb-1">
+          <FileCheck className="w-4 h-4 text-[#C3A66B]" />
           <span>PropMind Passport</span>
         </div>
-        <p className="text-[11px] leading-relaxed text-[#C5D7CB]">
+        <p className="text-[11px] leading-relaxed text-[#D8C9A7]/85">
           Protected by PropMind AI-Powered Property Passport & MP RERA compliance.
         </p>
       </div>

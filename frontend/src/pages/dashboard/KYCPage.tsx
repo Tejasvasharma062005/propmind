@@ -81,7 +81,9 @@ export const KYCPage: React.FC = () => {
   });
 
   const kycRecord = kycResponse?.data;
-  const kycStatus = kycRecord?.status || (user?.is_verified ? 'APPROVED' : 'NOT_SUBMITTED');
+  const kycStatus = kycRecord?.status || 'NOT_SUBMITTED';
+  const isUnderReview = submitMutation.isSuccess || kycStatus === 'UNDER_REVIEW' || kycStatus === 'PENDING';
+  const isApproved = kycStatus === 'APPROVED';
 
   return (
     <div className="space-y-8 max-w-5xl">
@@ -126,17 +128,24 @@ export const KYCPage: React.FC = () => {
             </Badge>
           </div>
 
-          {submitMutation.isSuccess || kycStatus === 'UNDER_REVIEW' ? (
-            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+          {isUnderReview ? (
+            <div className="p-4 rounded-xl bg-[#F3EBD8] border border-[#D8C9A7] text-[#373124] text-sm flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-[#494431] shrink-0 mt-0.5" />
               <div>
                 <p className="font-bold">KYC Documents Under Compliance Review</p>
-                <p className="text-xs text-emerald-700 mt-0.5">
-                  Your identity documents have been encrypted (SHA-256) and stored with randomized UUID keys.
+                <p className="text-xs text-[#494431] mt-0.5">
+                  Your identity documents have been SHA-256 hashed and stored securely. They are currently in the <strong>Admin KYC Compliance Queue</strong> for manual verification by a PropMind administrator.
                 </p>
               </div>
             </div>
           ) : null}
+
+          {kycStatus === 'REJECTED' && kycRecord?.rejection_reason && (
+            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm">
+              <p className="font-bold">Action Required — Previous Submission Rejected</p>
+              <p className="text-xs mt-0.5">{kycRecord.rejection_reason}</p>
+            </div>
+          )}
 
           {errorMsg && (
             <div className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">
@@ -220,9 +229,16 @@ export const KYCPage: React.FC = () => {
               variant="primary"
               size="lg"
               fullWidth
+              disabled={isUnderReview || isApproved}
               isLoading={submitMutation.isPending}
             >
-              Submit KYC for Verification
+              {isUnderReview
+                ? 'Application under review'
+                : isApproved
+                ? 'KYC Verified'
+                : kycStatus === 'REJECTED'
+                ? 'Resubmit KYC for Verification'
+                : 'Submit KYC for Verification'}
             </Button>
           </form>
         </Card>

@@ -5,35 +5,58 @@ import {
   Search,
   ShieldCheck,
   Building2,
-  Users,
-  ArrowRight,
-  CheckCircle2,
-  Lock,
-  FileCheck2,
-  BadgePercent,
+  ArrowUpRight,
+  ChevronDown,
   MapPin,
+  BedDouble,
+  Maximize2,
+  Eye,
   Landmark,
-  Star,
-  Home,
+  CheckCircle2,
 } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { ListingCard } from '@/components/listings';
+import { ListingCard, formatPrice } from '@/components/listings';
 import { useListingSearch } from '@/hooks/useListings';
 import { platformService } from '@/services/platform.service';
 import { INDORE_LOCALITIES, PROPERTY_TYPES } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 import heroVillaImage from '@/assets/hero.png';
+
+const CATEGORY_TABS = [
+  { value: '', label: 'All Properties' },
+  { value: 'APARTMENT', label: 'Apartments' },
+  { value: 'INDEPENDENT_HOUSE', label: 'Villas / Houses' },
+  { value: 'PLOT', label: 'Plots & Land' },
+  { value: 'COMMERCIAL_OFFICE', label: 'Offices' },
+  { value: 'SHOP', label: 'Commercial' },
+  { value: 'PENTHOUSE', label: 'Penthouses' },
+];
+
+const PRICE_RANGES = [
+  { value: '', label: 'Any Budget' },
+  { value: '0-5000000', label: 'Under ₹50 L' },
+  { value: '5000000-10000000', label: '₹50 L – ₹1 Cr' },
+  { value: '10000000-20000000', label: '₹1 Cr – ₹2 Cr' },
+  { value: '20000000-', label: 'Above ₹2 Cr' },
+];
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const [selectedLocality, setSelectedLocality] = useState('');
   const [selectedPropertyType, setSelectedPropertyType] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPriceRange, setSelectedPriceRange] = useState('');
+  const [activeCategoryTab, setActiveCategoryTab] = useState('');
 
-  const { data: featuredListings, isLoading: loadingListings } = useListingSearch({
+  const { data: featuredListings } = useListingSearch({
+    page_size: 1,
+    sort_by: 'newest',
+  });
+
+  const { data: categoryListings, isLoading: loadingCategoryListings } = useListingSearch({
     page_size: 3,
     sort_by: 'newest',
+    property_type: activeCategoryTab || undefined,
   });
 
   const { data: stats } = useQuery({
@@ -46,439 +69,418 @@ export const LandingPage: React.FC = () => {
     const params = new URLSearchParams();
     if (selectedLocality) params.set('locality', selectedLocality);
     if (selectedPropertyType) params.set('property_type', selectedPropertyType);
-    if (searchQuery.trim()) params.set('search', searchQuery.trim());
+    if (selectedPriceRange) {
+      const [minP, maxP] = selectedPriceRange.split('-');
+      if (minP) params.set('min_price', minP);
+      if (maxP) params.set('max_price', maxP);
+    }
     navigate(`/listings?${params.toString()}`);
   };
 
+  const spotlightListing = featuredListings?.data?.[0];
+
   return (
-    <div className="bg-[#FAF7F2] text-[#1C2420] pb-20">
-      {/* 1. ARCHITECTURAL EDITORIAL HERO SECTION */}
-      <section className="relative overflow-hidden bg-[#14231B] text-[#FAF7F2] min-h-[540px] lg:min-h-[610px] flex items-center">
-        {/* Background Architectural Photography & Editorial Gradient Overlay */}
+    <div className="bg-[#F6F0DE] text-[#373124] pb-24">
+      {/* 1. HERO SECTION — DEEP CHARCOAL ARCHITECTURAL COMPOSITION */}
+      <section className="relative overflow-hidden bg-[#171715] text-[#F8F4E9] min-h-[580px] lg:min-h-[640px] flex flex-col justify-between">
+        {/* Background Architectural Image & Charcoal Gradient Overlay */}
         <div className="absolute inset-0 z-0">
           <img
             src={heroVillaImage}
-            alt="Indore Modern Architectural Residence"
+            alt="Indore Architectural Residence"
             className="w-full h-full object-cover object-right opacity-55"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#111F18] via-[#14231B]/88 to-[#14231B]/35" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111F18]/90 via-transparent to-[#111F18]/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#171715] via-[#171715]/85 to-[#171715]/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#171715] via-transparent to-[#171715]/40" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
-          <div className="max-w-3xl space-y-6">
-            {/* Eyebrow Label with Horizontal Rule */}
-            <div className="inline-flex items-center gap-4 text-[11px] sm:text-xs uppercase tracking-[0.25em] text-[#E6E0D3]/90 font-medium">
-              <span>INDORE&apos;S PREMIUM REAL ESTATE PLATFORM</span>
-              <span className="h-px w-12 bg-[#C9A96E]/70" />
-            </div>
-
-            {/* Editorial Serif Display Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-normal tracking-tight leading-[1.06]">
-              <span className="block text-[#FAF7F2]">Find. Verify. Invest.</span>
-              <span className="block text-[#D8C29D] mt-1">with Confidence.</span>
+        {/* Hero Headline Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-8 w-full">
+          <div className="max-w-2xl space-y-5">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-serif font-normal tracking-tight leading-[1.04]">
+              <span className="block text-[#F8F4E9]">Refining the</span>
+              <span className="block text-[#F8F4E9]">
+                Art of <span className="text-[#C3A66B]">Verified</span> Living
+              </span>
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-sm sm:text-base text-[#E6E0D3]/90 max-w-xl leading-relaxed font-normal">
-              Discover verified properties, connect with trusted professionals,
-              and complete your real estate journey — the smart way.
+            <p className="text-sm sm:text-base text-[#D8C9A7] max-w-md leading-relaxed font-normal">
+              PropMind delivers audited Digital Property Passports, government-source provenance,
+              and escrow-protected real estate transactions across Indore.
             </p>
 
-            {/* Refined Pill-Shaped Ivory Search Bar */}
-            <form
-              onSubmit={handleHeroSearch}
-              className="mt-8 p-2 sm:p-2.5 bg-[#FAF7F2]/95 backdrop-blur-md rounded-3xl sm:rounded-full shadow-2xl border border-white/20 flex flex-col md:flex-row items-stretch md:items-center gap-2 text-[#1C2420] max-w-3xl"
-            >
-              {/* Keyword Input */}
-              <div className="flex-1 flex items-center gap-2.5 px-4 py-2">
-                <Search className="w-4 h-4 text-[#5A625D] shrink-0" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search for properties in Indore..."
-                  className="w-full bg-transparent text-sm text-[#1C2420] placeholder-[#7A827D] focus:outline-none"
-                />
-              </div>
+            <div className="flex items-center gap-2 text-xs text-[#D8C9A7]/90 pt-1">
+              <MapPin className="w-3.5 h-3.5 text-[#C3A66B]" />
+              <span>Indore, Madhya Pradesh</span>
+            </div>
+          </div>
+        </div>
 
-              <div className="hidden md:block h-6 w-px bg-[#D5CCB9]" />
-
-              {/* Indore Locality Selector */}
-              <div className="flex items-center gap-1.5 px-3 py-2">
-                <MapPin className="w-4 h-4 text-[#4E6B58] shrink-0" />
-                <select
-                  aria-label="Select Indore locality"
-                  value={selectedLocality}
-                  onChange={(e) => setSelectedLocality(e.target.value)}
-                  className="bg-transparent text-xs sm:text-sm font-medium text-[#1C2420] focus:outline-none cursor-pointer pr-2"
-                >
-                  <option value="">Indore (All)</option>
-                  {INDORE_LOCALITIES.map((loc) => (
-                    <option key={loc} value={loc}>
-                      {loc}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="hidden md:block h-6 w-px bg-[#D5CCB9]" />
-
-              {/* Property Type Selector */}
-              <div className="flex items-center gap-1.5 px-3 py-2">
-                <Home className="w-4 h-4 text-[#4E6B58] shrink-0" />
-                <select
-                  aria-label="Select property type"
-                  value={selectedPropertyType}
-                  onChange={(e) => setSelectedPropertyType(e.target.value)}
-                  className="bg-transparent text-xs sm:text-sm font-medium text-[#1C2420] focus:outline-none cursor-pointer pr-2"
-                >
-                  <option value="">Property Type</option>
-                  {PROPERTY_TYPES.map((pt) => (
-                    <option key={pt.value} value={pt.value}>
-                      {pt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Deep Forest-Green Pill Search CTA */}
-              <Button
-                type="submit"
-                variant="primary"
-                size="md"
-                className="px-7 py-3 rounded-full bg-[#1B3126] hover:bg-[#122119] text-[#FAF7F2] shrink-0"
-                rightIcon={<ArrowRight className="w-4 h-4" />}
+        {/* Bottom-Positioned Warm Ivory Search Panel */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 sm:pb-12 w-full">
+          <form
+            onSubmit={handleHeroSearch}
+            className="bg-[#F6F0DE] text-[#373124] rounded-2xl sm:rounded-full border border-[#D8C9A7] p-3 sm:pl-7 sm:pr-2.5 sm:py-2.5 grid grid-cols-1 md:grid-cols-4 items-center gap-3 md:gap-0 shadow-xl"
+          >
+            {/* Col 1: LOCATION */}
+            <div className="md:pr-5 md:border-r border-[#D8C9A7] text-left">
+              <label className="flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-semibold text-[#494431]">
+                LOCATION <ChevronDown className="w-3 h-3" />
+              </label>
+              <select
+                aria-label="Select Indore location"
+                value={selectedLocality}
+                onChange={(e) => setSelectedLocality(e.target.value)}
+                className="w-full bg-transparent text-sm font-medium text-[#373124] focus:outline-none cursor-pointer mt-0.5"
               >
-                Search
-              </Button>
-            </form>
-
-            {/* Popular Localities Quick Links */}
-            <div className="pt-2 flex flex-wrap items-center gap-2 text-xs text-[#E6E0D3]/80">
-              <span className="font-medium text-[#C9A96E]">Prime Corridors:</span>
-              {['Vijay Nagar', 'Super Corridor', 'Scheme 54', 'Bypass Road', 'Bicholi Mardana'].map(
-                (loc) => (
-                  <Link
-                    key={loc}
-                    to={`/listings?locality=${encodeURIComponent(loc)}`}
-                    className="px-3 py-1 rounded-full bg-white/10 hover:bg-[#C9A96E] hover:text-[#14231B] border border-white/15 text-[#FAF7F2] transition-colors"
-                  >
+                <option value="">All Indore Localities</option>
+                {INDORE_LOCALITIES.map((loc) => (
+                  <option key={loc} value={loc}>
                     {loc}
-                  </Link>
-                )
-              )}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
+
+            {/* Col 2: PROPERTY TYPE */}
+            <div className="md:px-5 md:border-r border-[#D8C9A7] text-left">
+              <label className="flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-semibold text-[#494431]">
+                PROPERTY TYPE <ChevronDown className="w-3 h-3" />
+              </label>
+              <select
+                aria-label="Select property type"
+                value={selectedPropertyType}
+                onChange={(e) => setSelectedPropertyType(e.target.value)}
+                className="w-full bg-transparent text-sm font-medium text-[#373124] focus:outline-none cursor-pointer mt-0.5"
+              >
+                <option value="">All Property Types</option>
+                {PROPERTY_TYPES.map((pt) => (
+                  <option key={pt.value} value={pt.value}>
+                    {pt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Col 3: PRICE RANGE */}
+            <div className="md:px-5 text-left">
+              <label className="flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-semibold text-[#494431]">
+                PRICE RANGE <ChevronDown className="w-3 h-3" />
+              </label>
+              <select
+                aria-label="Select price range"
+                value={selectedPriceRange}
+                onChange={(e) => setSelectedPriceRange(e.target.value)}
+                className="w-full bg-transparent text-sm font-medium text-[#373124] focus:outline-none cursor-pointer mt-0.5"
+              >
+                {PRICE_RANGES.map((pr) => (
+                  <option key={pr.value} value={pr.value}>
+                    {pr.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Col 4: Deep Charcoal Pill CTA */}
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="w-full md:w-auto inline-flex items-center justify-center gap-3 pl-5 pr-2 py-2.5 rounded-full bg-[#171715] hover:bg-[#494431] text-[#F8F4E9] text-xs font-medium tracking-wide transition-colors"
+              >
+                <span>Search Property</span>
+                <span className="w-7 h-7 rounded-full bg-[#F8F4E9] text-[#171715] flex items-center justify-center">
+                  <Search className="w-3.5 h-3.5" />
+                </span>
+              </button>
+            </div>
+          </form>
         </div>
       </section>
 
-      {/* 2. WARM CREAM TRUST & PROVENANCE RIBBON */}
-      <section className="bg-[#F3EFE6] border-b border-[#E6E0D3]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 items-center divide-y sm:divide-y-0 lg:divide-x divide-[#E0D8C7]">
-            {/* Pillar 1 */}
-            <div className="flex items-center gap-3.5 pt-3 sm:pt-0">
-              <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#D5CCB9] flex items-center justify-center text-[#1B3126] shrink-0">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-[#1C2420]">
-                  100% Verified
-                </div>
-                <div className="text-xs text-[#5A625D]">
-                  {stats?.verified_properties_count
-                    ? `${stats.verified_properties_count} Properties Audited`
-                    : 'Properties & Passports'}
-                </div>
-              </div>
+      {/* 2. ABOUT / INTRODUCTION SECTION — ASYMMETRIC EDITORIAL "WHY PROPMIND" */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-24">
+        <h2 className="text-4xl sm:text-5xl font-serif font-normal text-[#373124] mb-10">
+          Why PropMind
+        </h2>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+          {/* Left Column (6 cols): Large Architectural Photo + Editorial Introduction */}
+          <div className="lg:col-span-6 space-y-6">
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-[#D8C9A7] bg-[#F3EBD8]">
+              <img
+                src={heroVillaImage}
+                alt="PropMind Verified Architecture in Indore"
+                className="w-full h-full object-cover object-center"
+              />
             </div>
 
-            {/* Pillar 2 */}
-            <div className="flex items-center gap-3.5 pt-3 sm:pt-0 lg:pl-6">
-              <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#D5CCB9] flex items-center justify-center text-[#1B3126] shrink-0">
-                <Landmark className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-[#1C2420]">Integrated with</div>
-                <div className="text-xs text-[#5A625D]">6 MP Government Sources</div>
-              </div>
-            </div>
-
-            {/* Pillar 3 */}
-            <div className="flex items-center gap-3.5 pt-3 sm:pt-0 lg:pl-6">
-              <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#D5CCB9] flex items-center justify-center text-[#1B3126] shrink-0">
-                <Users className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-[#1C2420]">
-                  {stats?.active_listings_count
-                    ? `${stats.active_listings_count} Live Listings`
-                    : 'Multi-Role Ecosystem'}
-                </div>
-                <div className="text-xs text-[#5A625D]">Buyers, Owners & Advocates</div>
-              </div>
-            </div>
-
-            {/* Pillar 4 */}
-            <div className="flex items-center gap-3.5 pt-3 sm:pt-0 lg:pl-6">
-              <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#D5CCB9] flex items-center justify-center text-[#1B3126] shrink-0">
-                <Star className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-[#1C2420]">
-                  +{stats?.top_locality_growth ?? 14.5}% YoY
-                </div>
-                <div className="text-xs text-[#5A625D]">
-                  {stats?.top_locality || 'Super Corridor'} Growth
-                </div>
-              </div>
-            </div>
-
-            {/* Pillar 5: Editorial Italic Serif Tagline */}
-            <div className="pt-3 sm:pt-0 lg:pl-6 flex items-center justify-between gap-3">
-              <p className="font-serif italic text-base sm:text-lg text-[#1C2420] leading-snug">
-                A smarter way to
-                <span className="block">experience real estate</span>
-              </p>
-              <span className="h-px w-8 bg-[#C9A96E] shrink-0 hidden xl:block" />
-            </div>
+            <p className="text-sm text-[#494431] leading-relaxed max-w-lg">
+              Welcome to <strong className="text-[#373124]">PropMind</strong>, Central India&apos;s
+              AI-Powered Property Passport ecosystem. Every property undergoes a 5-pillar legal,
+              title, physical, and municipal tax audit backed by Madhya Pradesh government source
+              provenance before entering escrow.
+            </p>
           </div>
-        </div>
-      </section>
 
-      {/* 3. ASYMMETRIC FEATURED PROPERTIES & EDITORIAL CALLOUT SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 lg:pt-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Left Column (3 cols): Editorial Heading & Explore All Pill CTA */}
-          <div className="lg:col-span-3 flex flex-col justify-between space-y-6 py-2">
-            <div className="space-y-4">
-              <div className="eyebrow-label">
-                <span>FEATURED PROPERTIES</span>
-                <span className="h-px w-10 bg-[#8C8474]/60" />
+          {/* Right Column (6 cols): Key Platform Statistics + Secondary Editorial Card */}
+          <div className="lg:col-span-6 space-y-8">
+            <div className="grid grid-cols-3 gap-6 border-b border-[#D8C9A7] pb-8">
+              <div>
+                <div className="text-4xl sm:text-5xl font-serif font-normal text-[#373124]">
+                  {stats?.verified_properties_count ?? 0}+
+                </div>
+                <div className="text-xs text-[#494431] mt-1">Passports Audited</div>
               </div>
-
-              <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-serif font-normal text-[#1C2420] leading-[1.12]">
-                Discover the finest properties{' '}
-                <span className="text-[#5A7363] block mt-1">in Indore</span>
-              </h2>
-
-              <p className="text-xs sm:text-sm text-[#5A625D] leading-relaxed">
-                Every property is backed by an audited 5-pillar PropMind Digital Passport and verified title provenance.
-              </p>
+              <div>
+                <div className="text-4xl sm:text-5xl font-serif font-normal text-[#373124]">
+                  6
+                </div>
+                <div className="text-xs text-[#494431] mt-1">MP Gov Sources</div>
+              </div>
+              <div>
+                <div className="text-4xl sm:text-5xl font-serif font-normal text-[#373124]">
+                  {stats?.active_listings_count ?? 0}+
+                </div>
+                <div className="text-xs text-[#494431] mt-1">Live Listings</div>
+              </div>
             </div>
 
-            <div className="pt-2">
-              <Link to="/listings">
-                <Button
-                  variant="primary"
-                  size="md"
-                  rightIcon={<ArrowRight className="w-4 h-4" />}
-                  className="rounded-full px-6 py-3"
+            {/* Secondary Architectural Verification Card */}
+            <div className="rounded-2xl bg-[#F3EBD8] border border-[#D8C9A7] p-6 sm:p-8 space-y-5">
+              <div className="flex items-center justify-between">
+                <span className="eyebrow-label">
+                  <span>DIGITAL PROPERTY PASSPORT</span>
+                  <span className="h-px w-8 bg-[#C3A66B]" />
+                </span>
+                <Landmark className="w-5 h-5 text-[#494431]" />
+              </div>
+
+              <h3 className="text-2xl sm:text-3xl font-serif font-normal text-[#373124] leading-snug">
+                30-Year Title Verification &amp; Institutional Escrow Protection
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#373124]">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#C3A66B] shrink-0" />
+                  <span>MP Bhulekh &amp; Khasra Audit</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#C3A66B] shrink-0" />
+                  <span>MP RERA &amp; IGRS Sampada</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#C3A66B] shrink-0" />
+                  <span>IMC Tax &amp; IDA Scheme NOC</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#C3A66B] shrink-0" />
+                  <span>Advocate Title Search Ledger</span>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  to="/properties"
+                  className="inline-flex items-center gap-2 text-xs font-semibold text-[#171715] hover:text-[#494431] transition-colors"
                 >
-                  Explore All Properties
-                </Button>
+                  <span>Explore Verified Property Registry</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. FEATURED PROPERTIES SHOWCASE — ARCHITECTURAL FLOATING CARD */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-24">
+        <div className="relative rounded-3xl overflow-hidden bg-[#171715] border border-[#494431] min-h-[460px] flex flex-col items-center justify-center px-4 py-14 sm:py-16">
+          {/* Split Architectural Backdrop */}
+          <div className="absolute inset-0 z-0 opacity-35">
+            <img
+              src={spotlightListing?.primary_image || heroVillaImage}
+              alt="Featured Indore Residence"
+              className="w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[#171715]/60" />
+          </div>
+
+          {/* Centered Editorial Heading */}
+          <div className="relative z-10 text-center mb-8">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-normal text-[#F8F4E9]">
+              Featured Properties
+            </h2>
+          </div>
+
+          {/* Centered Floating Warm Ivory Card */}
+          {spotlightListing ? (
+            <div className="relative z-10 w-full max-w-md bg-[#F6F0DE] text-[#373124] rounded-2xl border border-[#D8C9A7] p-6 sm:p-7 shadow-2xl space-y-5">
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 rounded-full bg-[#F8F4E9] border border-[#D8C9A7] text-[11px] font-medium text-[#373124]">
+                  {spotlightListing.listing_type_display || 'For Sale'}
+                </span>
+                <span className="px-3 py-1 rounded-full bg-[#F3EBD8] border border-[#D8C9A7] text-[11px] font-medium text-[#494431]">
+                  {spotlightListing.property_summary.property_type_display || 'Residence'}
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-serif font-semibold text-[#373124] leading-tight">
+                  {spotlightListing.property_summary.title}
+                </h3>
+                <p className="text-xs text-[#494431] mt-1">
+                  {spotlightListing.property_summary.locality}, {spotlightListing.property_summary.city}
+                </p>
+              </div>
+
+              <p className="text-2xl font-bold text-[#171715] tracking-tight">
+                {formatPrice(spotlightListing.asking_price, spotlightListing.listing_type)}
+              </p>
+
+              <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[#D8C9A7] text-xs text-[#373124]">
+                <div className="flex items-center gap-2">
+                  <Maximize2 className="w-3.5 h-3.5 text-[#494431]" />
+                  <span>
+                    {Number(
+                      spotlightListing.property_summary.carpet_area ||
+                        spotlightListing.property_summary.built_up_area ||
+                        spotlightListing.property_summary.plot_area ||
+                        0
+                    ).toLocaleString('en-IN')}{' '}
+                    sq ft
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <BedDouble className="w-3.5 h-3.5 text-[#494431]" />
+                  <span>
+                    {spotlightListing.property_summary.bedrooms > 0
+                      ? `${spotlightListing.property_summary.bedrooms} BHK`
+                      : spotlightListing.property_summary.property_type_display}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#C3A66B]" />
+                  <span>
+                    {spotlightListing.property_summary.is_verified ? 'Passport Verified' : 'Under Audit'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Eye className="w-3.5 h-3.5 text-[#494431]" />
+                  <span>{spotlightListing.views_count} Views</span>
+                </div>
+              </div>
+
+              <Link
+                to={`/listings/${spotlightListing.id}`}
+                className="w-full inline-flex items-center justify-between pl-5 pr-2 py-2.5 rounded-full bg-[#F8F4E9] hover:bg-[#171715] text-[#373124] hover:text-[#F8F4E9] border border-[#D8C9A7] text-xs font-semibold transition-all group"
+              >
+                <span>See Our Property Listing</span>
+                <span className="w-7 h-7 rounded-full bg-[#171715] group-hover:bg-[#C3A66B] text-[#F8F4E9] group-hover:text-[#171715] flex items-center justify-center transition-colors">
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </span>
+              </Link>
+            </div>
+          ) : (
+            <div className="relative z-10 w-full max-w-md bg-[#F6F0DE] text-[#373124] rounded-2xl border border-[#D8C9A7] p-6 sm:p-7 shadow-2xl space-y-4 text-center">
+              <span className="inline-block px-3 py-1 rounded-full bg-[#F3EBD8] border border-[#D8C9A7] text-[11px] font-medium text-[#494431]">
+                Indore Verified Showcase
+              </span>
+              <h3 className="text-2xl font-serif font-semibold text-[#373124]">
+                Publish Your First Verified Listing
+              </h3>
+              <p className="text-xs text-[#494431] leading-relaxed">
+                No live marketplace listings have been published yet. Register a property and submit
+                your Digital Property Passport to feature it here.
+              </p>
+              <Link
+                to="/dashboard/listings/new"
+                className="w-full inline-flex items-center justify-between pl-5 pr-2 py-2.5 rounded-full bg-[#171715] hover:bg-[#494431] text-[#F8F4E9] text-xs font-semibold transition-all"
+              >
+                <span>Create Marketplace Listing</span>
+                <span className="w-7 h-7 rounded-full bg-[#C3A66B] text-[#171715] flex items-center justify-center">
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </span>
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 4. PROPERTIES BY TYPE — CATEGORY TABS & LIVE LISTING GRID */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-24">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+          <h2 className="text-4xl sm:text-5xl font-serif font-normal text-[#373124]">
+            Properties by Type
+          </h2>
+          <Link
+            to="/listings"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#494431] hover:text-[#171715] transition-colors"
+          >
+            <span>View Full Marketplace</span>
+            <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* Clean Bordered Category Tab Strip */}
+        <div className="flex items-center gap-1 overflow-x-auto pb-2 mb-8 border-b border-[#D8C9A7]">
+          {CATEGORY_TABS.map((tab) => {
+            const isActive = activeCategoryTab === tab.value;
+            return (
+              <button
+                key={tab.label}
+                type="button"
+                onClick={() => setActiveCategoryTab(tab.value)}
+                className={cn(
+                  'px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all',
+                  isActive
+                    ? 'bg-[#F3EBD8] text-[#171715] border border-[#D8C9A7] font-semibold'
+                    : 'text-[#494431] hover:text-[#171715] hover:bg-[#F3EBD8]/50'
+                )}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {loadingCategoryListings ? (
+          <div className="flex justify-center py-16">
+            <Spinner size="lg" className="text-[#171715]" />
+          </div>
+        ) : !categoryListings || categoryListings.data.length === 0 ? (
+          <EmptyState
+            icon={Building2}
+            title="No listings in this category yet"
+            description="Try selecting another property category or publish a verified listing from your dashboard."
+            actionText="Explore All Listings"
+            onAction={() => navigate('/listings')}
+          />
+        ) : (
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {categoryListings.data.map((listing) => (
+                <ListingCard key={listing.id} listing={listing} />
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between pt-2 text-xs text-[#494431]">
+              <div className="flex items-center gap-3">
+                <span className="font-mono font-semibold text-[#373124]">
+                  01 / {String(Math.max(categoryListings.pagination?.total_pages ?? 1, 1)).padStart(2, '0')}
+                </span>
+                <span className="h-px w-16 bg-[#373124]" />
+              </div>
+
+              <Link
+                to={`/listings${activeCategoryTab ? `?property_type=${activeCategoryTab}` : ''}`}
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#D8C9A7] bg-[#F8F4E9] hover:bg-[#171715] hover:text-[#F8F4E9] text-[#373124] font-medium transition-colors"
+              >
+                <span>Browse All</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
-
-          {/* Center Column (6 cols): Live Marketplace Listing Cards */}
-          <div className="lg:col-span-6">
-            {loadingListings ? (
-              <div className="h-full min-h-[320px] flex items-center justify-center bg-white rounded-2xl border border-[#E6E0D3]">
-                <Spinner size="lg" className="text-[#1B3126]" />
-              </div>
-            ) : !featuredListings || featuredListings.data.length === 0 ? (
-              <EmptyState
-                icon={Building2}
-                title="No live marketplace listings yet"
-                description="Register your first authentic property or publish a verified listing from your PropMind dashboard."
-                actionText="Publish a Listing"
-                onAction={() => navigate('/dashboard/listings/new')}
-                className="h-full justify-center"
-              />
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 h-full">
-                {featuredListings.data.slice(0, 3).map((listing) => (
-                  <ListingCard key={listing.id} listing={listing} />
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Right Column (3 cols): Deep Forest-Green Editorial "Get Verified Property Updates" Card */}
-          <div className="lg:col-span-3">
-            <div className="h-full rounded-2xl bg-[#16281F] text-[#FAF7F2] p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden border border-[#284436] shadow-md">
-              {/* Subtle Botanical & Architectural Line Art SVG */}
-              <div className="space-y-4 relative z-10">
-                <span className="text-[10px] uppercase tracking-[0.22em] text-[#C9A96E] font-semibold block">
-                  PROPMIND INTELLIGENCE
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-serif font-normal text-[#FAF7F2] leading-snug">
-                  Get Verified Property Updates
-                </h3>
-                <p className="text-xs sm:text-sm text-[#C5D7CB] leading-relaxed">
-                  Be the first to know about new and government-verified listings across Indore.
-                </p>
-                <div className="pt-2">
-                  <Link to="/register">
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F3EFE6] hover:bg-[#C9A96E] text-[#14231B] text-xs font-semibold tracking-wide transition-colors shadow-xs"
-                    >
-                      <span>Subscribe Now</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Decorative Indore Architectural Silhouette at Bottom */}
-              <div className="mt-8 pt-4 border-t border-[#C9A96E]/25 relative z-10">
-                <svg
-                  viewBox="0 0 260 64"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-full h-14 text-[#C9A96E]/55"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M4 62H256M20 62V36L34 26L48 36V62M26 44H42M26 52H42M64 62V28H106V62M74 36H96M74 46H96M118 62V16L134 6L150 16V62M126 26H142M126 36H142M126 46H142M164 62V30L182 20L200 30V62M174 40H190M214 62V38H244V62"
-                    stroke="currentColor"
-                    strokeWidth="1.25"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. HOW PROPMIND WORKS — EDITORIAL 3-PILLAR PROTOCOL */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-          <div>
-            <div className="eyebrow-label mb-2">
-              <span>OPERATING PROTOCOL</span>
-              <span className="h-px w-10 bg-[#8C8474]/60" />
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-serif font-normal text-[#1C2420]">
-              How PropMind Works
-            </h2>
-          </div>
-          <p className="text-sm text-[#5A625D] max-w-md">
-            An end-to-end real estate operating ecosystem engineered for Indore&apos;s buyers, owners, advocates, and developers.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-7 rounded-2xl border border-[#E6E0D3] space-y-3 hover:border-[#C9A96E] transition-colors">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C9A96E]">
-              STEP 01
-            </span>
-            <h3 className="text-2xl font-serif font-bold text-[#1C2420]">Discover & Inspect</h3>
-            <p className="text-sm text-[#5A625D] leading-relaxed">
-              Explore curated residential and commercial properties across Indore&apos;s prime corridors with transparent carpet areas and pricing.
-            </p>
-          </div>
-
-          <div className="bg-white p-7 rounded-2xl border border-[#E6E0D3] space-y-3 hover:border-[#C9A96E] transition-colors">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4E6B58]">
-              STEP 02
-            </span>
-            <h3 className="text-2xl font-serif font-bold text-[#1C2420]">Verify Property Passport</h3>
-            <p className="text-sm text-[#5A625D] leading-relaxed">
-              Audit the 5-pillar Digital Property Passport backed by MP Bhulekh, MP RERA, IGRS Sampada, IMC tax clearance, and 30-year advocate title reports.
-            </p>
-          </div>
-
-          <div className="bg-white p-7 rounded-2xl border border-[#E6E0D3] space-y-3 hover:border-[#C9A96E] transition-colors">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1B3126]">
-              STEP 03
-            </span>
-            <h3 className="text-2xl font-serif font-bold text-[#1C2420]">Negotiate & Close in Escrow</h3>
-            <p className="text-sm text-[#5A625D] leading-relaxed">
-              Schedule site visits, exchange transparent counter-offers, and complete milestone-protected conveyance in the Transaction Room.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. THE PROPMIND DIFFERENCE — DEEP FOREST GREEN ARCHITECTURAL FEATURE */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
-        <div className="bg-[#14231B] text-[#FAF7F2] rounded-3xl p-8 sm:p-12 lg:p-16 border border-[#264133]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-[#C9A96E] font-semibold">
-                <span>THE PROPMIND STANDARD</span>
-                <span className="h-px w-10 bg-[#C9A96E]/60" />
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-serif font-normal tracking-tight leading-tight">
-                Central India&apos;s Benchmark for Trust & Provenance
-              </h2>
-              <p className="text-sm text-[#C5D7CB] leading-relaxed">
-                Traditional real estate is plagued by disputed registries, hidden encumbrances, and
-                unverified listings. PropMind replaces uncertainty with provenance-tracked government records and
-                on-ground legal verification by licensed High Court advocates.
-              </p>
-
-              <div className="space-y-3 pt-1">
-                <div className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#C9A96E] shrink-0" />
-                  <span className="text-sm text-[#FAF7F2]">
-                    30-Year Chain of Title Deed audit on every verified listing
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#C9A96E] shrink-0" />
-                  <span className="text-sm text-[#FAF7F2]">
-                    Direct integration adapters for MP Bhulekh, MP RERA, IGRS Sampada & IMC Indore
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#C9A96E] shrink-0" />
-                  <span className="text-sm text-[#FAF7F2]">
-                    Escrow milestone payment protection until Sub-Registrar deed execution
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                <FileCheck2 className="w-7 h-7 text-[#C9A96E]" />
-                <h4 className="font-serif font-bold text-[#FAF7F2] text-xl">Property Passport</h4>
-                <p className="text-xs text-[#C5D7CB] leading-relaxed">
-                  Tamper-proof 5-pillar audit certificate covering identity, title, legal, physical, and tax clearances.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                <Lock className="w-7 h-7 text-[#84A48E]" />
-                <h4 className="font-serif font-bold text-[#FAF7F2] text-xl">Institutional Escrow</h4>
-                <p className="text-xs text-[#C5D7CB] leading-relaxed">
-                  5-stage conveyance milestones held securely until Sub-Registrar Indore execution.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                <ShieldCheck className="w-7 h-7 text-[#C9A96E]" />
-                <h4 className="font-serif font-bold text-[#FAF7F2] text-xl">MP RERA & Bhulekh</h4>
-                <p className="text-xs text-[#C5D7CB] leading-relaxed">
-                  Authentic provenance tracking across 6 Madhya Pradesh & Indore government authorities.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                <BadgePercent className="w-7 h-7 text-[#84A48E]" />
-                <h4 className="font-serif font-bold text-[#FAF7F2] text-xl">Transparent Deal Room</h4>
-                <p className="text-xs text-[#C5D7CB] leading-relaxed">
-                  Direct buyer-to-owner negotiation ledger with complete audit trail and zero hidden markups.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </section>
     </div>
   );

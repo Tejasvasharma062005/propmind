@@ -9,22 +9,22 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          'bg-[#1B3126] text-[#FAF7F2] hover:bg-[#122119] focus:ring-[#1B3126] shadow-xs',
+          'bg-[#171715] text-[#F8F4E9] hover:bg-[#494431] focus:ring-[#494431]',
         secondary:
-          'bg-[#FAF7F2] text-[#1C2420] hover:bg-[#EFEAE0] border border-[#D5CCB9] focus:ring-[#84A48E]',
+          'bg-[#F3EBD8] text-[#373124] hover:bg-[#D8C9A7]/60 border border-[#D8C9A7] focus:ring-[#C3A66B]',
         outline:
-          'border border-[#1B3126] text-[#1B3126] hover:bg-[#1B3126] hover:text-[#FAF7F2] focus:ring-[#1B3126]',
+          'border border-[#373124] text-[#373124] hover:bg-[#171715] hover:text-[#F8F4E9] focus:ring-[#494431]',
         ghost:
-          'text-[#4A544E] hover:text-[#1B3126] hover:bg-[#EFEAE0]/70 focus:ring-[#84A48E]',
+          'text-[#494431] hover:text-[#171715] hover:bg-[#F3EBD8] focus:ring-[#D8C9A7]',
         danger:
-          'bg-rose-700 text-white hover:bg-rose-800 focus:ring-rose-600 shadow-xs',
+          'bg-rose-800 text-[#F8F4E9] hover:bg-rose-900 focus:ring-rose-700',
         success:
-          'bg-[#4E6B58] text-white hover:bg-[#405648] focus:ring-[#4E6B58] shadow-xs',
+          'bg-[#494431] text-[#F8F4E9] hover:bg-[#373124] focus:ring-[#494431]',
       },
       size: {
         sm: 'text-xs px-3.5 py-1.5 gap-1.5',
         md: 'text-sm px-5 py-2.5 gap-2',
-        lg: 'text-sm sm:text-base px-7 py-3 gap-2.5 font-semibold',
+        lg: 'text-sm sm:text-base px-7 py-3 gap-2.5 font-medium',
         icon: 'h-9 w-9 p-0',
       },
       fullWidth: {

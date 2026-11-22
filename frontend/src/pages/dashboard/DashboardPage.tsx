@@ -38,25 +38,25 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      {/* Editorial Forest-Green Welcome Banner */}
-      <div className="bg-[#14231B] rounded-3xl p-6 sm:p-9 text-[#FAF7F2] border border-[#284436] shadow-md relative overflow-hidden">
+      {/* Editorial Deep Charcoal Welcome Banner */}
+      <div className="bg-[#171715] rounded-3xl p-6 sm:p-9 text-[#F8F4E9] border border-[#494431] relative overflow-hidden">
         <div className="relative z-10 max-w-2xl space-y-3">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="px-3 py-1 rounded-full bg-white/10 text-[#C9A96E] text-[11px] uppercase tracking-[0.18em] font-semibold border border-[#C9A96E]/30">
+            <span className="px-3 py-1 rounded-full bg-[#494431]/40 text-[#C3A66B] text-[11px] uppercase tracking-[0.18em] font-semibold border border-[#C3A66B]/30">
               Indore Real Estate Operations Hub
             </span>
             {user?.is_verified && (
-              <span className="flex items-center gap-1 text-[#84A48E] text-xs font-medium">
-                <ShieldCheck className="w-4 h-4 text-[#C9A96E]" /> KYC Verified
+              <span className="flex items-center gap-1 text-[#D8C9A7] text-xs font-medium">
+                <ShieldCheck className="w-4 h-4 text-[#C3A66B]" /> Account Verified
               </span>
             )}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-[#FAF7F2]">
-            Welcome back, <span className="text-[#D8C29D]">{user?.name || 'Partner'}</span>
+          <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-[#F8F4E9]">
+            Welcome back, <span className="text-[#C3A66B]">{user?.name || 'Partner'}</span>
           </h1>
 
-          <p className="text-sm text-[#C5D7CB] leading-relaxed">
+          <p className="text-sm text-[#D8C9A7] leading-relaxed">
             {isSeller
               ? 'Manage your Indore property assets, review verified buyer inquiries, and monitor escrow transaction milestones.'
               : 'Track your scheduled property visits in Indore, active purchase offers, and legal title verification audits.'}
@@ -69,7 +69,7 @@ export const DashboardPage: React.FC = () => {
                   <Button
                     variant="secondary"
                     size="md"
-                    leftIcon={<PlusCircle className="w-4 h-4 text-[#1B3126]" />}
+                    leftIcon={<PlusCircle className="w-4 h-4 text-[#171715]" />}
                   >
                     Register Property
                   </Button>
@@ -78,7 +78,7 @@ export const DashboardPage: React.FC = () => {
                   <Button
                     variant="outline"
                     size="md"
-                    className="bg-white/10 text-[#FAF7F2] border-[#C9A96E]/50 hover:bg-[#C9A96E] hover:text-[#14231B]"
+                    className="bg-white/10 text-[#F8F4E9] border-[#C3A66B]/60 hover:bg-[#C3A66B] hover:text-[#171715]"
                     leftIcon={<Tags className="w-4 h-4" />}
                   >
                     Publish Marketplace Listing
@@ -312,20 +312,20 @@ export const DashboardPage: React.FC = () => {
           </Card>
 
           {summary?.spotlight_trend && (
-            <Card className="p-6 bg-[#14231B] text-[#FAF7F2] border-[#284436] space-y-3">
-              <div className="flex items-center gap-2 text-[#C9A96E] text-xs font-semibold uppercase tracking-wider">
+            <Card className="p-6 bg-[#171715] text-[#F8F4E9] border-[#494431] space-y-3">
+              <div className="flex items-center gap-2 text-[#C3A66B] text-xs font-semibold uppercase tracking-wider">
                 <TrendingUp className="w-4 h-4" />
                 <span>Indore Top Growth Corridor</span>
               </div>
               <h4 className="text-xl font-serif font-bold">
                 {summary.spotlight_trend.locality}, {summary.spotlight_trend.city}
               </h4>
-              <p className="text-xs text-[#C5D7CB] leading-relaxed">
+              <p className="text-xs text-[#D8C9A7] leading-relaxed">
                 Capital values in {summary.spotlight_trend.locality} have appreciated +
                 {summary.spotlight_trend.growth_percentage}% YoY in {summary.spotlight_trend.quarter}{' '}
                 {summary.spotlight_trend.year}.
               </p>
-              <div className="pt-2 text-xs text-[#C9A96E] font-medium">
+              <div className="pt-2 text-xs text-[#C3A66B] font-medium">
                 Avg. Rate: ₹{Number(summary.spotlight_trend.average_price_sqft).toLocaleString('en-IN')}/sq.ft
               </div>
             </Card>

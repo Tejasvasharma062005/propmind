@@ -72,12 +72,12 @@ export const ListingDetailPage: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           {/* Consistent 16:10 Architectural Gallery */}
           <div className="space-y-3">
-            <div className="aspect-[16/10] bg-[#EFEAE0] rounded-2xl border border-[#E6E0D3] overflow-hidden">
+            <div className="aspect-[16/10] bg-[#F3EBD8] rounded-2xl border border-[#D8C9A7] overflow-hidden">
               {current ? (
                 <img src={current.url} alt={current.caption || p.title} className="w-full h-full object-cover object-center" referrerPolicy="no-referrer" />
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-[#7A827D] gap-1.5">
-                  <ImageOff className="w-10 h-10 text-[#8C8474]" />
+                <div className="w-full h-full flex flex-col items-center justify-center text-[#494431] gap-1.5">
+                  <ImageOff className="w-10 h-10 text-[#494431]/70" />
                   <span className="text-xs font-medium">No photos uploaded</span>
                 </div>
               )}
@@ -86,7 +86,7 @@ export const ListingDetailPage: React.FC = () => {
               <div className="flex gap-2.5 overflow-x-auto pb-1">
                 {media.map((m, i) => (
                   <button key={m.id} type="button" onClick={() => setActiveImage(i)}
-                    className={`w-24 h-16 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${i === activeImage ? 'border-[#C9A96E] ring-2 ring-[#1B3126]/20' : 'border-transparent opacity-70 hover:opacity-100'}`}>
+                    className={`w-24 h-16 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${i === activeImage ? 'border-[#C3A66B] ring-2 ring-[#494431]/30' : 'border-transparent opacity-70 hover:opacity-100'}`}>
                     <img src={m.url} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   </button>
                 ))}
@@ -98,56 +98,56 @@ export const ListingDetailPage: React.FC = () => {
             <div className="flex flex-wrap gap-2">
               <Badge variant={isRental ? 'warning' : 'success'}>{listing.listing_type_display}</Badge>
               <Badge>{p.property_type_display}</Badge>
-              {p.is_verified && <Badge variant="primary"><BadgeCheck className="w-3.5 h-3.5 text-[#C9A96E]" /> PropMind Verified</Badge>}
+              {p.is_verified && <Badge variant="primary"><BadgeCheck className="w-3.5 h-3.5 text-[#C3A66B]" /> PropMind Verified</Badge>}
             </div>
-            <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#1C2420]">{p.title}</h1>
-            <p className="flex items-center gap-1.5 text-sm text-[#5A625D]">
-              <MapPin className="w-4 h-4 text-[#4E6B58]" /> {p.locality}, {p.city}, {p.state} {p.pincode}
+            <h1 className="text-3xl sm:text-4xl font-serif font-normal text-[#373124]">{p.title}</h1>
+            <p className="flex items-center gap-1.5 text-sm text-[#494431]">
+              <MapPin className="w-4 h-4 text-[#C3A66B]" /> {p.locality}, {p.city}, {p.state} {p.pincode}
             </p>
-            <p className="text-xs text-[#7A827D]">Exact street address is shared after you connect with the owner.</p>
+            <p className="text-xs text-[#494431]/75">Exact street address is shared after you connect with the owner.</p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {facts.map((f) => (
-              <div key={f.label} className="p-4 rounded-xl bg-white border border-[#E6E0D3]">
-                <f.icon className="w-4 h-4 text-[#1B3126] mb-1.5" />
-                <p className="text-[11px] uppercase tracking-wider text-[#7A827D]">{f.label}</p>
-                <p className="font-semibold text-[#1C2420] text-sm mt-0.5">{f.value}</p>
+              <div key={f.label} className="p-4 rounded-xl bg-[#F8F4E9] border border-[#D8C9A7]">
+                <f.icon className="w-4 h-4 text-[#171715] mb-1.5" />
+                <p className="text-[11px] uppercase tracking-wider text-[#494431]">{f.label}</p>
+                <p className="font-semibold text-[#373124] text-sm mt-0.5">{f.value}</p>
               </div>
             ))}
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-[#E6E0D3]">
-            <h2 className="text-xl font-serif font-bold text-[#1C2420] mb-2">About this property</h2>
+          <div className="bg-[#F8F4E9] p-6 rounded-2xl border border-[#D8C9A7]">
+            <h2 className="text-xl font-serif font-bold text-[#373124] mb-2">About this property</h2>
             {/* Rendered as plain text: React escapes it, so user content cannot inject HTML */}
-            <p className="text-sm text-[#5A625D] whitespace-pre-line leading-relaxed">{p.description}</p>
+            <p className="text-sm text-[#494431] whitespace-pre-line leading-relaxed">{p.description}</p>
           </div>
         </div>
 
         {/* Price / action panel */}
         <aside className="space-y-4">
           <div className="sticky top-24 space-y-4">
-            <div className="p-6 rounded-2xl border border-[#D5CCB9] bg-white shadow-xs space-y-4">
+            <div className="p-6 rounded-2xl border border-[#D8C9A7] bg-[#F8F4E9] space-y-4">
               <div>
-                <span className="text-[11px] uppercase tracking-[0.18em] text-[#7A827D] font-semibold">
+                <span className="text-[11px] uppercase tracking-[0.18em] text-[#494431] font-semibold">
                   {isRental ? 'Monthly Rent' : 'Asking Price'}
                 </span>
-                <p className="text-3xl font-serif font-bold text-[#1C2420] mt-1">
+                <p className="text-3xl font-serif font-bold text-[#373124] mt-1">
                   {formatPrice(listing.asking_price, listing.listing_type)}
                 </p>
-                {listing.is_negotiable && <p className="text-xs text-[#4E6B58] font-semibold mt-1">Price negotiable</p>}
+                {listing.is_negotiable && <p className="text-xs text-[#494431] font-semibold mt-1">Price negotiable</p>}
               </div>
 
-              <dl className="text-sm space-y-2 text-[#5A625D] border-t border-[#EFEAE0] pt-3">
+              <dl className="text-sm space-y-2 text-[#494431] border-t border-[#D8C9A7]/70 pt-3">
                 {isRental && Number(listing.security_deposit) > 0 && (
-                  <div className="flex justify-between"><dt>Security deposit</dt><dd className="font-semibold text-[#1C2420]">{formatPrice(listing.security_deposit)}</dd></div>
+                  <div className="flex justify-between"><dt>Security deposit</dt><dd className="font-semibold text-[#373124]">{formatPrice(listing.security_deposit)}</dd></div>
                 )}
                 {Number(listing.maintenance_charges) > 0 && (
-                  <div className="flex justify-between"><dt>Maintenance</dt><dd className="font-semibold text-[#1C2420]">{formatPrice(listing.maintenance_charges)}/mo</dd></div>
+                  <div className="flex justify-between"><dt>Maintenance</dt><dd className="font-semibold text-[#373124]">{formatPrice(listing.maintenance_charges)}/mo</dd></div>
                 )}
-                <div className="flex justify-between"><dt>Listed by</dt><dd className="font-semibold text-[#1C2420]">{listing.listed_by_name}</dd></div>
+                <div className="flex justify-between"><dt>Listed by</dt><dd className="font-semibold text-[#373124]">{listing.listed_by_name}</dd></div>
                 {listing.rera_number && (
-                  <div className="flex justify-between"><dt>RERA No.</dt><dd className="font-mono text-xs text-[#1B3126]">{listing.rera_number}</dd></div>
+                  <div className="flex justify-between"><dt>RERA No.</dt><dd className="font-mono text-xs text-[#373124]">{listing.rera_number}</dd></div>
                 )}
                 {listing.published_at && (
                   <div className="flex justify-between"><dt>Listed on</dt><dd>{formatDate(listing.published_at)}</dd></div>
@@ -161,18 +161,18 @@ export const ListingDetailPage: React.FC = () => {
                   Manage listing
                 </Button>
               ) : (
-                <Button fullWidth variant="primary" leftIcon={<ShieldCheck className="w-4 h-4 text-[#C9A96E]" />}
+                <Button fullWidth variant="primary" leftIcon={<ShieldCheck className="w-4 h-4 text-[#C3A66B]" />}
                   onClick={() => navigate(`/properties/${listing.property}`)}>
                   View Passport, Book Visit or Make Offer
                 </Button>
               )}
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#16281F] text-[#FAF7F2] border border-[#284436] text-xs space-y-1.5">
-              <p className="flex items-center gap-1.5 font-serif font-semibold text-sm text-[#C9A96E]">
-                <ShieldCheck className="w-4 h-4 text-[#C9A96E]" /> PropMind Escrow Advisory
+            <div className="p-4 rounded-2xl bg-[#171715] text-[#F8F4E9] border border-[#494431] text-xs space-y-1.5">
+              <p className="flex items-center gap-1.5 font-serif font-semibold text-sm text-[#C3A66B]">
+                <ShieldCheck className="w-4 h-4 text-[#C3A66B]" /> PropMind Escrow Advisory
               </p>
-              <p className="text-[#C5D7CB] leading-relaxed">
+              <p className="text-[#D8C9A7] leading-relaxed">
                 Never pay a token amount before visiting the property and verifying its Digital Property Passport. PropMind will never ask you to pay outside the escrow transaction room.
               </p>
             </div>

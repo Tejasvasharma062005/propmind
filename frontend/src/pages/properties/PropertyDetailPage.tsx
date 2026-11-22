@@ -357,10 +357,10 @@ export const PropertyDetailPage: React.FC = () => {
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#16281F] text-[#FAF7F2] border border-[#284436] flex items-start gap-2.5">
-              <ShieldCheck className="w-5 h-5 text-[#C9A96E] shrink-0 mt-0.5" />
-              <div className="text-xs text-[#C5D7CB] leading-relaxed">
-                <strong className="text-[#C9A96E]">PropMind Escrow Protected:</strong> Token & milestone funds held safely
+            <div className="p-4 rounded-xl bg-[#171715] text-[#F8F4E9] border border-[#494431] flex items-start gap-2.5">
+              <ShieldCheck className="w-5 h-5 text-[#C3A66B] shrink-0 mt-0.5" />
+              <div className="text-xs text-[#D8C9A7] leading-relaxed">
+                <strong className="text-[#C3A66B]">PropMind Escrow Protected:</strong> Token & milestone funds held safely
                 until physical registry execution at Indore Sub-Registrar.
               </div>
             </div>

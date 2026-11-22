@@ -68,12 +68,12 @@ export const BrowseListingsPage: React.FC = () => {
         <div>
           <div className="eyebrow-label mb-1.5">
             <span>INDORE MARKETPLACE</span>
-            <span className="h-px w-10 bg-[#8C8474]/60" />
+            <span className="h-px w-10 bg-[#C3A66B]" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#1C2420]">
+          <h1 className="text-3xl sm:text-4xl font-serif font-normal text-[#373124]">
             Curated Properties in Indore
           </h1>
-          <p className="text-sm text-[#5A625D] mt-1">
+          <p className="text-sm text-[#494431] mt-1">
             Every listing is reviewed by our verification team before it goes live.
             {pagination && ` ${pagination.total_count} listing${pagination.total_count === 1 ? '' : 's'} found.`}
           </p>
@@ -95,7 +95,7 @@ export const BrowseListingsPage: React.FC = () => {
       </div>
 
       <form
-        className="flex flex-wrap sm:flex-nowrap gap-2.5 mb-6 p-2 bg-white rounded-2xl sm:rounded-full border border-[#E6E0D3] shadow-2xs"
+        className="flex flex-wrap sm:flex-nowrap gap-2.5 mb-6 p-2 bg-[#F8F4E9] rounded-2xl sm:rounded-full border border-[#D8C9A7]"
         onSubmit={(e) => { e.preventDefault(); setFilter('search', searchText.trim()); }}
       >
         <div className="flex-1 min-w-[200px]">
@@ -121,7 +121,7 @@ export const BrowseListingsPage: React.FC = () => {
       </form>
 
       {showFilters && (
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 p-5 mb-8 bg-white border border-[#E6E0D3] rounded-2xl shadow-2xs">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 p-5 mb-8 bg-[#F8F4E9] border border-[#D8C9A7] rounded-2xl">
           <Select label="Locality" options={[{ value: '', label: 'Any' }, ...INDORE_LOCALITIES.map((l) => ({ value: l, label: l }))]}
             value={filters.locality ?? ''} onChange={(e) => setFilter('locality', e.target.value)} />
           <Select label="Property type" options={[{ value: '', label: 'Any' }, ...PROPERTY_TYPE_OPTIONS]}
@@ -141,7 +141,7 @@ export const BrowseListingsPage: React.FC = () => {
       )}
 
       {isLoading ? (
-        <div className="flex justify-center py-20"><Spinner size="lg" className="text-[#1B3126]" /></div>
+        <div className="flex justify-center py-20"><Spinner size="lg" className="text-[#171715]" /></div>
       ) : isError ? (
         <EmptyState icon={Building2} title="Couldn't load listings" description={getErrorMessage(error)} />
       ) : !data || data.data.length === 0 ? (

@@ -79,13 +79,13 @@ export const SearchPage: React.FC = () => {
         <div>
           <div className="eyebrow-label mb-1.5">
             <span>INDORE PROPERTY REGISTRY</span>
-            <span className="h-px w-10 bg-[#8C8474]/60" />
+            <span className="h-px w-10 bg-[#C3A66B]" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#1C2420]">
+          <h1 className="text-3xl sm:text-4xl font-serif font-normal text-[#373124]">
             Verified Property Passports
           </h1>
-          <p className="text-sm text-[#5A625D] mt-1">
-            Showing <span className="font-semibold text-[#1C2420]">{properties.length}</span>{' '}
+          <p className="text-sm text-[#494431] mt-1">
+            Showing <span className="font-semibold text-[#373124]">{properties.length}</span>{' '}
             registered properties in Indore, Madhya Pradesh
           </p>
         </div>
@@ -101,8 +101,8 @@ export const SearchPage: React.FC = () => {
             Filters
           </Button>
 
-          <div className="flex items-center gap-2 bg-white border border-[#D5CCB9] rounded-full px-4 py-2 shadow-2xs">
-            <ArrowUpDown className="w-4 h-4 text-[#5A625D]" />
+          <div className="flex items-center gap-2 bg-[#F8F4E9] border border-[#D8C9A7] rounded-full px-4 py-2">
+            <ArrowUpDown className="w-4 h-4 text-[#494431]" />
             <select
               value={filters.sort_by || 'created_at_desc'}
               onChange={(e) =>
@@ -111,7 +111,7 @@ export const SearchPage: React.FC = () => {
                   sort_by: e.target.value as FilterType['sort_by'],
                 })
               }
-              className="text-xs sm:text-sm font-medium text-[#1C2420] bg-transparent focus:outline-none cursor-pointer"
+              className="text-xs sm:text-sm font-medium text-[#373124] bg-transparent focus:outline-none cursor-pointer"
             >
               <option value="created_at_desc">Newest First</option>
               <option value="price_asc">Price: Low to High</option>

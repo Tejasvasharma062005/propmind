@@ -18,12 +18,12 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ media = [], classNam
     return (
       <div
         className={cn(
-          'aspect-[16/9] sm:aspect-[21/9] rounded-2xl bg-[#F3EFE6] border border-[#E6E0D3] flex flex-col items-center justify-center text-[#7A827D] gap-2',
+          'aspect-[16/9] sm:aspect-[21/9] rounded-2xl bg-[#F3EBD8] border border-[#D8C9A7] flex flex-col items-center justify-center text-[#494431] gap-2',
           className
         )}
       >
-        <ImageOff className="w-10 h-10 text-[#8C8474]" />
-        <p className="text-sm font-serif font-semibold text-[#5A625D]">No property photos uploaded yet</p>
+        <ImageOff className="w-10 h-10 text-[#494431]/70" />
+        <p className="text-sm font-serif font-semibold text-[#373124]">No property photos uploaded yet</p>
       </div>
     );
   }
@@ -39,7 +39,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ media = [], classNam
   return (
     <div className={cn('space-y-3', className)}>
       {/* Main Image Display */}
-      <div className="relative aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden bg-[#14231B] border border-[#E6E0D3] group shadow-xs">
+      <div className="relative aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden bg-[#171715] border border-[#D8C9A7] group">
         <img
           src={images[activeIndex]}
           alt={`Property image ${activeIndex + 1}`}
@@ -52,7 +52,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ media = [], classNam
             <button
               type="button"
               onClick={prevImage}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#14231B]/70 hover:bg-[#14231B] text-[#FAF7F2] flex items-center justify-center backdrop-blur-xs transition-colors"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#171715]/75 hover:bg-[#171715] text-[#F8F4E9] flex items-center justify-center backdrop-blur-xs transition-colors"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -60,7 +60,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ media = [], classNam
             <button
               type="button"
               onClick={nextImage}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#14231B]/70 hover:bg-[#14231B] text-[#FAF7F2] flex items-center justify-center backdrop-blur-xs transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#171715]/75 hover:bg-[#171715] text-[#F8F4E9] flex items-center justify-center backdrop-blur-xs transition-colors"
               aria-label="Next image"
             >
               <ChevronRight className="w-5 h-5" />
@@ -70,13 +70,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ media = [], classNam
 
         {/* Counter & Fullscreen trigger */}
         <div className="absolute bottom-3 right-3 flex items-center gap-2">
-          <span className="px-3 py-1 rounded-full bg-[#14231B]/80 text-[#FAF7F2] text-xs font-medium backdrop-blur-xs">
+          <span className="px-3 py-1 rounded-full bg-[#171715]/80 text-[#F8F4E9] text-xs font-medium backdrop-blur-xs">
             {activeIndex + 1} / {images.length}
           </span>
           <button
             type="button"
             onClick={() => setIsLightboxOpen(true)}
-            className="p-2 rounded-full bg-[#14231B]/80 hover:bg-[#14231B] text-[#C9A96E] backdrop-blur-xs transition-colors"
+            className="p-2 rounded-full bg-[#171715]/80 hover:bg-[#171715] text-[#C3A66B] backdrop-blur-xs transition-colors"
             aria-label="View full screen lightbox"
           >
             <Maximize2 className="w-4 h-4" />
@@ -95,7 +95,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ media = [], classNam
               className={cn(
                 'relative w-20 h-14 sm:w-24 sm:h-16 rounded-xl overflow-hidden shrink-0 border-2 transition-all',
                 activeIndex === idx
-                  ? 'border-[#C9A96E] ring-2 ring-[#1B3126]/20'
+                  ? 'border-[#C3A66B] ring-2 ring-[#494431]/30'
                   : 'border-transparent opacity-70 hover:opacity-100'
               )}
             >
@@ -107,15 +107,15 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ media = [], classNam
 
       {/* Lightbox Modal */}
       {isLightboxOpen && (
-        <div className="fixed inset-0 z-50 bg-[#0D1712]/95 flex flex-col justify-between p-4 sm:p-8 animate-in fade-in duration-200">
-          <div className="flex items-center justify-between text-[#FAF7F2]">
+        <div className="fixed inset-0 z-50 bg-[#171715]/95 flex flex-col justify-between p-4 sm:p-8 animate-in fade-in duration-200">
+          <div className="flex items-center justify-between text-[#F8F4E9]">
             <span className="text-sm font-serif">
               Photograph {activeIndex + 1} of {images.length}
             </span>
             <button
               type="button"
               onClick={() => setIsLightboxOpen(false)}
-              className="p-2 rounded-full hover:bg-white/10 text-[#FAF7F2]"
+              className="p-2 rounded-full hover:bg-white/10 text-[#F8F4E9]"
               aria-label="Close full view"
             >
               <X className="w-6 h-6" />
@@ -157,7 +157,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ media = [], classNam
                 onClick={() => setActiveIndex(idx)}
                 className={cn(
                   'w-16 h-12 rounded-lg object-cover cursor-pointer border-2',
-                  activeIndex === idx ? 'border-[#C9A96E] scale-105' : 'border-transparent opacity-60'
+                  activeIndex === idx ? 'border-[#C3A66B] scale-105' : 'border-transparent opacity-60'
                 )}
               />
             ))}

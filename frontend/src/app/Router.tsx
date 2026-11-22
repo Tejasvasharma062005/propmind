@@ -31,6 +31,7 @@ import { LeadsPage } from '@/pages/dashboard/LeadsPage';
 import { VisitsPage } from '@/pages/dashboard/VisitsPage';
 import { TransactionsPage } from '@/pages/dashboard/TransactionsPage';
 import { KYCPage } from '@/pages/dashboard/KYCPage';
+import { SettingsPage } from '@/pages/dashboard/SettingsPage';
 import { VerificationPage } from '@/pages/dashboard/VerificationPage';
 import { AnalyticsPage } from '@/pages/dashboard/AnalyticsPage';
 import { BuildersAndInvestmentsPage } from '@/pages/dashboard/BuildersAndInvestmentsPage';
@@ -180,7 +181,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'settings',
-        element: <KYCPage />,
+        element: <SettingsPage />,
       },
     ],
   },

@@ -7,13 +7,13 @@ export const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-[#F3EFE6] text-[#1C2420] border-[#E0D8C7]',
-        primary: 'bg-[#1B3126] text-[#FAF7F2] border-[#1B3126]',
-        secondary: 'bg-[#E6EDE8] text-[#2D4737] border-[#C5D7CB]',
-        success: 'bg-[#6F8575] text-white border-[#5D7363]',
-        warning: 'bg-[#C9A96E] text-[#1C2420] border-[#B99659]',
-        danger: 'bg-rose-50 text-rose-800 border-rose-200',
-        outline: 'text-[#1C2420] border-[#D5CCB9] bg-transparent',
+        default: 'bg-[#F3EBD8] text-[#373124] border-[#D8C9A7]',
+        primary: 'bg-[#171715] text-[#F8F4E9] border-[#171715]',
+        secondary: 'bg-[#F6F0DE] text-[#494431] border-[#D8C9A7]',
+        success: 'bg-[#494431] text-[#F8F4E9] border-[#494431]',
+        warning: 'bg-[#C3A66B] text-[#171715] border-[#B49456]',
+        danger: 'bg-rose-50 text-rose-900 border-rose-200',
+        outline: 'text-[#373124] border-[#D8C9A7] bg-transparent',
       },
       size: {
         sm: 'text-[11px] px-2.5 py-0.5 gap-1',
@@ -48,11 +48,11 @@ export const Badge: React.FC<BadgeProps> = ({
         <span
           className={cn(
             'w-1.5 h-1.5 rounded-full',
-            variant === 'success' && 'bg-white',
-            variant === 'warning' && 'bg-[#1C2420]',
-            variant === 'danger' && 'bg-rose-600',
-            variant === 'primary' && 'bg-[#C9A96E]',
-            (!variant || variant === 'default' || variant === 'secondary') && 'bg-[#4E6B58]'
+            variant === 'success' && 'bg-[#C3A66B]',
+            variant === 'warning' && 'bg-[#171715]',
+            variant === 'danger' && 'bg-rose-700',
+            variant === 'primary' && 'bg-[#C3A66B]',
+            (!variant || variant === 'default' || variant === 'secondary') && 'bg-[#494431]'
           )}
         />
       )}
